@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="EasyCrawling.Views.TestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             
+             DataContext="{Binding Test}"
+             Name="testControl">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid Grid.Row="0"
+            CanUserAddRows="False"            
+            HeadersVisibility="Column"
+            ColumnWidth="*"
+            IsReadOnly="True"
+            ItemsSource="{Binding Tests}"/>
+
+        <Grid Grid.Row="1" Margin="0,3,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="  Test  " Grid.Column="0" Command="{Binding DoTestCommand}"/>
+            <GroupBox Header="Auto" Grid.Column="1">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Yes" IsChecked="{Binding IsAuto}" Command="{Binding DoTestCommand}"/>
+                    <RadioButton Content="No" IsChecked="True"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Classification" Grid.Column="2">
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="Name" IsChecked="{Binding IsName}" Command="{Binding ClassificationChangedCommand}"/>
+                    <RadioButton Content="Numbering" Command="{Binding ClassificationChangedCommand}"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

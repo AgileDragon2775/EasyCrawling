@@ -1,0 +1,291 @@
+﻿<UserControl x:Class="EasyCrawling.Views.CustomWordView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:enums="clr-namespace:EasyCrawling.Enums"
+             xmlns:ex="clr-namespace:EasyCrawling.Extensions"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             
+             DataContext="{Binding CustomWord}"
+             Name="customWordControl">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <DataGrid Grid.Row="0"
+                  Grid.Column="0"
+                  AutoGenerateColumns="False"  
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedWord}"
+                  ItemsSource="{Binding WordUnionList, UpdateSourceTrigger=PropertyChanged}"    
+                  RowHeight="23"
+                  Name="WordGrid">
+            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="New Word" Command="{Binding AddWordCommand}"/>
+                    <MenuItem Header="Other Crawling" Command="{Binding SwitchOtherCrawlingCommand}"/>
+                    <MenuItem Header="Except" Command="{Binding SwitchExceptCommand}"/>
+                    <MenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+ 
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="INDEX" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <RadioButton GroupName="Index" 
+                                         HorizontalAlignment="Center"
+                                         IsChecked="{Binding IsIndex ,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Numbering" IsReadOnly="True" Width="37"
+                                    Binding="{Binding Numbering}"/>
+                <DataGridTextColumn Header="Name"
+                                    Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="EncodedExample" IsReadOnly="True" Width="*"      
+                                    Binding="{Binding EncodedExample}"/>
+                <DataGridTextColumn Header="OriginalExample" IsReadOnly="True" Width="*"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    Binding="{Binding OriginalExample}"/>
+                <DataGridTemplateColumn MinWidth="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" 
+                                    Command="{Binding DataContext.DeleteWordCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="Detail">
+            <DataGrid AutoGenerateColumns="False"  
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single"                     
+                      ItemsSource="{Binding DataContext.OptionList, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}">
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:EncodingOptionType}}}"
+                                 DisplayMemberPath="Description">
+                        <ContextMenu.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Command" Value="{Binding DataContext.AddOptionCommand, 
+                                                                           RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                <Setter Property="CommandParameter" Value="{Binding Value}"/>
+                            </Style>
+                        </ContextMenu.ItemContainerStyle>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Order" Binding="{Binding Order}" IsReadOnly="True"/>
+
+                    <DataGridTemplateColumn Header="Option" Width="115">                        
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox SelectedValue="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:EncodingOptionType}}}" 
+                                          DisplayMemberPath="Description"
+                                          SelectedValuePath="Value">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding DataContext.OptionChangedCommand,
+                                                                                     RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Left" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding LeftWord, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction 
+                                                Command="{Binding DataContext.OptionChangedCommand,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Right" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding RightWord, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction 
+                                                Command="{Binding DataContext.OptionChangedCommand,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn MinWidth="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button 
+                                    Content="Delete" 
+                                    Command="{Binding DataContext.DeleteOptionCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}">                                   
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>                    
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0"
+                     IsReadOnly="True"
+                     Text ="{Binding ExampleText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                     
+                     MaxHeight="40"
+                     ScrollViewer.CanContentScroll="True"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <Button Grid.Column="2" 
+                    Content="Add Option"
+                    Command="{Binding AddOptionCommand}"
+                    CommandParameter="{x:Static enums:EncodingOptionType.NOTTING}"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+              Visibility="{Binding DataContext.IsVisibleOtherCrawling, 
+                                   RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ComboBox Grid.Row="0" 
+                      ItemsSource="{Binding CrawlingList, UpdateSourceTrigger=PropertyChanged}"    
+                      DisplayMemberPath="Name"
+                      Name="CrawlingList"/>            
+            <Button Grid.Row="1" Content="Add"
+                    Command="{Binding AddOtherCrawling}"
+                    CommandParameter="{Binding ElementName=CrawlingList, Path=SelectedItem}"/>
+            <DataGrid Grid.Row="2"
+                      AutoGenerateColumns="False"  
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedCrawling}"
+                      ItemsSource="{Binding OtherCrawlingList, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}"/>
+                    <DataGridTemplateColumn Header="Option">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Option, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction 
+                                                Command="{Binding DataContext.OtherCrawlingOptionChangedCommand,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                CommandParameter="{Binding}"/>                                            
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Test" 
+                                        Command="{Binding DataContext.TestCrawlingCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" 
+                                        Command="{Binding DataContext.DeleteCrawlingCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+               
+            <TextBox Grid.Row="3"
+                     IsReadOnly="True"
+                     Text ="{Binding OtherUrlOptionExample, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                     
+                     MaxHeight="40"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"
+              Visibility="{Binding DataContext.IsVisibleExcept, 
+                                   RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+                       
+            <DataGrid Grid.Row="0"
+                      AutoGenerateColumns="False"  
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single"
+                      ItemsSource="{Binding ExceptList, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add Except" Command="{Binding AddExceptCommand}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Except" Binding="{Binding Except, Mode=TwoWay}"/>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" 
+                                        Command="{Binding DataContext.DeleteExceptCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

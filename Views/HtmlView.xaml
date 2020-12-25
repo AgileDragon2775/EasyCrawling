@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="EasyCrawling.Views.HtmlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EasyCrawling.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Focusable="True"
+             PreviewKeyDown="htmlControl_PreviewKeyDown"
+             Name="htmlControl">
+    <Canvas>
+        <TextBox x:Name="htmlTextBox"
+                 Width="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ActualWidth}"
+                 Height="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=ActualHeight}"
+                 Text="{Binding Html.Html}"
+                 IsReadOnly="True"
+                 ScrollViewer.CanContentScroll="True"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 LostFocus="htmlTextBox_LostFocus"/>
+
+        <Grid Canvas.Right="10" Canvas.Top="10" x:Name="htmlSearchPanel" Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Name="searchTextBox" TextChanged="searchTextBox_TextChanged" KeyDown="searchTextBox_KeyDown"/>
+            <Button Grid.Column="1" Content=" Search " Click="searchButton_Click" Name="searchButton" Margin="3,0,3,0"/>
+            <Button Grid.Column="2" Content=" X " Click="Button_Click"/>
+        </Grid>
+    </Canvas>
+</UserControl>

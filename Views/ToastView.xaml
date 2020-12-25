@@ -1,0 +1,215 @@
+﻿<UserControl x:Class="EasyCrawling.Views.ToastView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:EasyCrawling.Views" 
+             xmlns:ex="clr-namespace:EasyCrawling.Extensions"
+             xmlns:enums="clr-namespace:EasyCrawling.Enums"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             
+             DataContext="{Binding Toast}"
+             Name="notificationControl">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Grid.Row="0" Header="Visual">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0"
+                          AutoGenerateColumns="False"  
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          SelectionMode="Single"
+                          ItemsSource="{Binding VisualList, UpdateSourceTrigger=PropertyChanged}">
+
+                    <DataGrid.ContextMenu>
+                        <ContextMenu ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:VisualType}}}"
+                                     DisplayMemberPath="Description">
+                            <ContextMenu.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Command" Value="{Binding DataContext.AddVisualCommand, 
+                                                                               RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding Value}"/>
+                                </Style>
+                            </ContextMenu.ItemContainerStyle>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Visual" 
+                                            Binding="{Binding NameVisual}"
+                                            IsReadOnly="True"
+                                            Width="*"/>
+                        
+                        <DataGridTemplateColumn Header="Numbering/Name" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Title, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="TextChanged">
+                                                <i:InvokeCommandAction                                                     
+                                                    Command="{Binding DataContext.TitleChangedCommand,
+                                                                      RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTextColumn Header="Example" 
+                                            Binding="{Binding Example, UpdateSourceTrigger=PropertyChanged}"
+                                            IsReadOnly="True"
+                                            Width="*"/>
+                        <DataGridTemplateColumn MinWidth="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete" 
+                                            Command="{Binding DataContext.DeleteVisualCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+                <Grid Grid.Row="1" Margin="0,3,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" 
+                              SelectedValue="{Binding VisualType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:VisualType}}}"
+                              DisplayMemberPath="Description"
+                              SelectedValuePath="Value"
+                              Name="VisualComboBox"/>
+                    <Button Grid.Column="1" Content="Add Visual" Margin="3,0,0,0"
+                            Command="{Binding AddVisualCommand}"
+                            CommandParameter="{Binding VisualType}"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+
+        <GroupBox Grid.Row="1" Header="Action When Click">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0"  
+                          AutoGenerateColumns="False"  
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          SelectionMode="Single"
+                          ItemsSource="{Binding ActionList}">
+
+                    <DataGrid.ContextMenu>
+                        <ContextMenu ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:WhenType}}}"
+                                     DisplayMemberPath="Description">
+                            <ContextMenu.ItemContainerStyle>
+                                <Style TargetType="MenuItem">
+                                    <Setter Property="Command" Value="{Binding DataContext.AddEventCommand, 
+                                                                               RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding Value}"/>
+                                </Style>
+                            </ContextMenu.ItemContainerStyle>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Click" 
+                                        Binding="{Binding NameWhen}"
+                                        IsReadOnly="True"
+                                        Width="60"/>
+                        <DataGridTemplateColumn Header="Action" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox SelectedValue="{Binding ActionType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:BaseActionType}}}" 
+                                              DisplayMemberPath="Description"
+                                              SelectedValuePath="Value"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Numbering/Name" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Title, Mode=TwoWay ,UpdateSourceTrigger=PropertyChanged}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="TextChanged">
+                                                <i:InvokeCommandAction                                                     
+                                                    Command="{Binding DataContext.TitleChangedCommand,
+                                                                      RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                                    CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        
+                        <DataGridTextColumn Header="Example" 
+                                            Binding="{Binding Example}"
+                                            IsReadOnly="True"
+                                            Width="*"/>
+                        <DataGridTextColumn Header="Folder" 
+                                            Binding="{Binding Folder}"
+                                            IsReadOnly="True"
+                                            Width="50"/>
+                        <DataGridTemplateColumn MinWidth="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Folder"
+                                            Command="{Binding DataContext.OpenFolderDialogCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete"
+                                            Command="{Binding DataContext.DeleteEventCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Row="1" Margin="0,3,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Column="0" 
+                              SelectedValue="{Binding WhenType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding Source={ex:EnumerationExtension {x:Type enums:WhenType}}}" 
+                              DisplayMemberPath="Description"
+                              SelectedValuePath="Value"/>
+                    <Button Grid.Column="1" Content="Add Action" Margin="3,0,3,0"
+                            Command="{Binding AddEventCommand}"
+                            CommandParameter="{Binding WhenType}"/>
+                    <Button Grid.Column="2" Content="Test Notification" Command="{Binding TestToastCommand}"/>
+                </Grid>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>
