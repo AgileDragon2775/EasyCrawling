@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LayoutRoot xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <RootPanel Orientation="Horizontal">
+    <LayoutDocumentPaneGroup Orientation="Horizontal">
+      <LayoutDocumentPaneGroup Orientation="Vertical">
+        <LayoutDocumentPaneGroup Orientation="Horizontal">
+          <LayoutDocumentPane Id="406e8c4a-8c52-41cf-9adf-e724c1872b42">
+            <LayoutDocument Title="Original word Tree" IsSelected="True" IsLastFocusedDocument="True" ContentId="ORIGINAL_WORD_TREE_DOC" LastActivationTimeStamp="11/02/2020 05:00:30" />
+          </LayoutDocumentPane>
+        </LayoutDocumentPaneGroup>
+        <LayoutDocumentPane>
+          <LayoutDocument Title="Custom words" IsSelected="True" ContentId="CUSTOM_WORD_DOC" FloatingLeft="848" FloatingTop="609" FloatingWidth="433" FloatingHeight="532" LastActivationTimeStamp="11/02/2020 05:00:30" PreviousContainerId="406e8c4a-8c52-41cf-9adf-e724c1872b42" PreviousContainerIndex="1" />
+        </LayoutDocumentPane>
+      </LayoutDocumentPaneGroup>
+      <LayoutDocumentPaneGroup Orientation="Vertical">
+        <LayoutDocumentPane>
+          <LayoutDocument Title="Selected List from Tree" IsSelected="True" ContentId="ORIGINAL_WORD_LIST_DOC" FloatingLeft="517" FloatingTop="520" FloatingWidth="870" FloatingHeight="532" LastActivationTimeStamp="11/02/2020 05:00:30" />
+        </LayoutDocumentPane>
+        <LayoutDocumentPane Id="0eb7c744-6936-45e9-9c18-d4ad1d683cca">
+          <LayoutDocument Title="Test" IsSelected="True" ContentId="TEST_DOC" FloatingLeft="898" FloatingTop="494" FloatingWidth="433" FloatingHeight="532" LastActivationTimeStamp="11/02/2020 05:00:30" />
+        </LayoutDocumentPane>
+      </LayoutDocumentPaneGroup>
+      <LayoutDocumentPaneGroup Orientation="Vertical">
+        <LayoutDocumentPane Id="97cd63d2-5bc5-477d-8a36-cc6ac99f56b3" DockHeight="1.50298062593145*">
+          <LayoutDocument Title="Detail Notification" IsSelected="True" ContentId="Toast_DOC" FloatingLeft="1388" FloatingTop="588" FloatingWidth="433" FloatingHeight="532" LastActivationTimeStamp="11/02/2020 05:00:30" PreviousContainerId="406e8c4a-8c52-41cf-9adf-e724c1872b42" PreviousContainerIndex="2" />
+        </LayoutDocumentPane>
+        <LayoutDocumentPane DockHeight="0.497019374068554*">
+          <LayoutDocument Title="Last Action" IsSelected="True" ContentId="ACTION_DOC" FloatingLeft="1146" FloatingTop="527" FloatingWidth="634" FloatingHeight="457" LastActivationTimeStamp="11/02/2020 05:00:30" PreviousContainerId="97cd63d2-5bc5-477d-8a36-cc6ac99f56b3" PreviousContainerIndex="0" />
+        </LayoutDocumentPane>
+      </LayoutDocumentPaneGroup>
+    </LayoutDocumentPaneGroup>
+  </RootPanel>
+  <TopSide />
+  <RightSide />
+  <LeftSide />
+  <BottomSide />
+  <FloatingWindows />
+  <Hidden />
+</LayoutRoot>
