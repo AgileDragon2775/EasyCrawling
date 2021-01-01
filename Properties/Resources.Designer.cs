@@ -70,9 +70,9 @@ namespace EasyCrawling.Properties {
         ///          &lt;LayoutDocumentPane Id=&quot;406e8c4a-8c52-41cf-9adf-e724c1872b42&quot;&gt;
         ///            &lt;LayoutDocument Title=&quot;Original word Tree&quot; IsSelected=&quot;True&quot; [나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
-        internal static string AvalonDock_Layout_1 {
+        internal static string AvalonDock_Layout_base {
             get {
-                return ResourceManager.GetString("AvalonDock_Layout_1", resourceCulture);
+                return ResourceManager.GetString("AvalonDock_Layout_base", resourceCulture);
             }
         }
         

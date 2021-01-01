@@ -23,8 +23,7 @@ namespace EasyCrawling
     {
         public CrawlingWindow()
         {
-            InitializeComponent();
-            InitDocuments("Layout_1");
+            InitializeComponent();           
         }       
 
         
@@ -74,7 +73,7 @@ namespace EasyCrawling
             var serializer = new XmlLayoutSerializer(dockManager);
             try
             {
-                using (var stream = new StreamWriter(string.Format(AppDomain.CurrentDomain.BaseDirectory + @".\AvalonDock_{0}.config", fileName)))
+                using (var stream = new StreamWriter(string.Format(FileHelper.BaseDirectory + @".\AvalonDock_{0}.config", fileName)))
                     serializer.Serialize(stream);
             }
             catch (Exception ioex)
@@ -82,21 +81,47 @@ namespace EasyCrawling
                 MessageBox.Show("An error occurred while writing the file." + ioex);
             }
         }
-
-        private void LoadLayout(string fileName)
+        private void InitDocuments(string fileName)
         {
-            var serializer = new XmlLayoutSerializer(dockManager);            
-
             try
             {
-                using (var stream = new StreamReader(string.Format(AppDomain.CurrentDomain.BaseDirectory + @".\AvalonDock_{0}.config", fileName)))  
-                    serializer.Deserialize(stream);
-                
+                using (var stream = new StreamReader(
+                    string.Format(string.Format(FileHelper.BaseDirectory + @".\AvalonDock_{0}.config", fileName))))
+                {
+                    LoadDocument(stream);
+                }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("An error occurred while reading the file." + ex);
             }
+        }
+        private void InitDocuments(TextReader text)
+        {
+            LoadDocument(text);
+        }
+
+        private void LoadLayout(string fileName)
+        {
+            var serializer = new XmlLayoutSerializer(dockManager);
+
+            try
+            {
+                using (var stream = new StreamReader(string.Format(FileHelper.BaseDirectory + @".\AvalonDock_{0}.config", fileName)))
+                    serializer.Deserialize(stream);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred while reading the file." + ex);
+            }
+        }
+
+        private void LoadLayout(TextReader text)
+        {
+            var serializer = new XmlLayoutSerializer(dockManager);                
+            serializer.Deserialize(text);
         }
 
         private void LoadDocument(TextReader reader)
@@ -130,22 +155,6 @@ namespace EasyCrawling
             catch { }
         }
 
-        private void InitDocuments(string fileName)
-        {           
-            try
-            {
-                using (var stream = new StreamReader(
-                    string.Format(string.Format(AppDomain.CurrentDomain.BaseDirectory + @".\AvalonDock_{0}.config", fileName))))
-                {
-                    LoadDocument(stream);
-                }
-               
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while reading the file." + ex);
-            }
-        }
         private void AddDocument(MyDoc docType)
         {           
             if (SearchDocument(docType.ToString(), dockManager.Layout) == null)
@@ -210,7 +219,8 @@ namespace EasyCrawling
 
         private void dockManager_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadLayout("Layout_1");
+            InitDocuments(new StringReader(Properties.Resources.AvalonDock_Layout_base));
+            LoadLayout(new StringReader(Properties.Resources.AvalonDock_Layout_base));
         }
 
         public IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject

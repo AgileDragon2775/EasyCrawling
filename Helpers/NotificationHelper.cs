@@ -220,21 +220,11 @@ namespace EasyCrawling.Helpers
                         Open(url);
                         break;
                     case BaseActionType.OPEN_FILE:
-                        string curPath = AppDomain.CurrentDomain.BaseDirectory;
-                        string tempFilePath = curPath + "temp\\" + "temp." + url.Split('/').Last().Split('.').Last();
-                        using (var client = new WebClient())
-                        {
-                            try
-                            {
-                                client.DownloadFile(url, tempFilePath);                               
-                            }
-                            catch
-                            {
-                                CreatTempForder();
-                                client.DownloadFile(url, tempFilePath);
-                            }
-                            System.Diagnostics.Process.Start(tempFilePath);
-                        }
+                        FileHelper.CreateDirectoryIfNeed(FileHelper.TempDirectory);
+                        string tempFilePath = FileHelper.TempDirectory + "\\" + "temp." + url.Split('/').Last().Split('.').Last();
+                        using (var client = new WebClient())                        
+                            client.DownloadFile(url, tempFilePath);
+                        System.Diagnostics.Process.Start(tempFilePath);
                         break;
                     case BaseActionType.DOWNLOAD_FILE:                     
                         using (var client = new WebClient())
@@ -272,17 +262,7 @@ namespace EasyCrawling.Helpers
                 {
                     MessageBox.Show(other.Message);
                 }
-            }
-            private void CreatTempForder()
-            {
-                string tempForderPath = AppDomain.CurrentDomain.BaseDirectory + "\\temp";
-                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(tempForderPath);
-
-                if (di.Exists == false)
-                {
-                    di.Create();
-                }
-            }
+            }           
         }
     }
 }

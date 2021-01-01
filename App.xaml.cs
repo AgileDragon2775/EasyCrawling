@@ -81,7 +81,7 @@ namespace EasyCrawling
                 FileHelper.LoadFiles()
                 .Select(x => new CrawlingAndIndexs(x)));
 
-            RegisterStatupIfNeed();
+            //RegisterStatupIfNeed();
             InitUstingName();
             Start(true);
 

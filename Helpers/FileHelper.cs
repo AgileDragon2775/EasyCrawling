@@ -10,10 +10,14 @@ namespace EasyCrawling.Helpers
 {
     public class FileHelper
     {
+        public static string BaseDirectory
+            = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "EasyCrawling");
         private static string IndexDirectory
-            = AppDomain.CurrentDomain.BaseDirectory + "\\" + "indexs";
+            = Path.Combine(BaseDirectory, "indexs");
         private static string CrawlingDirectory
-            = AppDomain.CurrentDomain.BaseDirectory + "\\" + "crawlings";
+            = Path.Combine(BaseDirectory, "crawlings");
+        public static string TempDirectory
+            = Path.Combine(BaseDirectory, "temp");
 
         public static void Serialize(Crawling crawling, string fileName)
         {
@@ -58,12 +62,8 @@ namespace EasyCrawling.Helpers
 
         public static void CreateDirectoryIfNeed(string dir_name)
         {
-            DirectoryInfo di = new DirectoryInfo(dir_name);
-
-            if (!di.Exists)
-            {
-                di.Create();
-            }
+            Directory.CreateDirectory(BaseDirectory);
+            Directory.CreateDirectory(dir_name);
         }
 
         public static void SaveFile(Crawling crawling)
